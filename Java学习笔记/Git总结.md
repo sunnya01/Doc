@@ -18,3 +18,4 @@ Git总结
 13. 克隆远程库-ssh版本，cd到指定目录git clone “远端地址”
 14. 提交到到远端
 15. git 常用命令 git add filename.后缀 git commmit -m "修改原因" git push -u origin master git remote  ctrl + z 退出 
+16. 添加远端 git remote add remote <远程仓库的URL>
