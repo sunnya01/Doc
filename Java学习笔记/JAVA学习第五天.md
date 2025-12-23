@@ -34,3 +34,30 @@
 
 因此双发在互相等待中发生死锁
 
+Sleep()是挂靠在object类中的方法，可以在任意地方使用，表示的是当前线程挂起，但是如果是同步区的代码sleep也不会放开当前代码块的控制权
+
+wait()方法表示的是当前线程挂起，该方法也是object类中的方法，必须依靠一个同步块中的锁定对象，不然会报异常。当该方法执行完以后当前线程的同步区代码开始挂起，并推出锁定，允许其他线程进入该同步代码块。并且允许在其他线程调用object的notify的方法唤醒当前线程进行对后续逻辑的完成
+
+
+
+###### 线程池
+
+Executors 工厂类 主要用户返回实现了ExecutorService接口的实现类的实例对象，后续对需要进行多线程执行的代码都是通过该接口的实例对象完成
+
+ExecutorService接口，通过实现了Runnable接口的实例对象，改对象内部的run方法包含了具体待执行的逻辑，结合ExecutorService接口的方法的
+
+execute方法作为实参填入，线程池自动分配资源。或者通过实现了Callable接口的实例对象调用ExecutorService的submit方法作为实参填入
+
+###### 线程池-ExecutorService接口的多种实现方式
+
+Executor工厂提供了多种方法返回不同的线程池管理对象
+
+Executors.*newCachedThreadPool*() 新增一个动态数量的线程池,即当你使用返回的ExecutorService接口实例对象调用execute方法或者submit方法时内部会自动创建线程，改线程执行完毕后会保留固定时间，超过时间未被使用后关闭。该方法允许填入一个Thread对象作为每次创建新线程的代理对象(通过ThreadFactory接口包装一层)通常会在接口待实现的newThread方法中使用new Thread(Runnable)再包一层创建Thread对象并返回，并基于这个对象设置线程的相关属性，Runnable表示的是外部调用execute方法或者submit方法传入的待执行逻辑实例对象，也可以在新的Thread对象中重写run方法，并在里面调用Runnable的run方法实现代理
+
+Executors.*newSingleThreadExecutor*()新增一个只包含一个线程的线程池
+
+Executors.newFixedThreadPool(int count) 新增一个包含了count个线程的线程池
+
+Executors.newScheduledThreadPool(int count) 新增一个包含了count个线程的线程池，该线程池对象继承了ScheduledExecutorService接口，此接口提供了线程执行的一些按照延迟固定时间执行方法或者按照周期性计划执行方法
+
+ThreadPoolExecutor Executors工厂类返回的接口实例对象本质上是实现了ExecutorService接口的ThreadPoolExecutor类的实例对象，因此也可以对返回的接口实例对象进行向下强转 ThreadPoolExecutor executorService1 = (ThreadPoolExecutor) Executors.*newFixedThreadPool*(10);并通过该类的结构的实例对象进行<u>线程池</u>属性的设置，即线程池的管理
